@@ -1,0 +1,9 @@
+# Dependências e builds
+node_modules/
+
+# Sessões e tokens do WPPConnect
+tokens/
+
+# Credenciais e dados sensíveis
+credentials.json
+users.json
