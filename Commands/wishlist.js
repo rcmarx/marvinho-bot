@@ -1,26 +1,48 @@
+// commands/wishlist.js
 const { adicionarItem, consultarItens, removerItem } = require('../sheets');
 
 async function handle(texto, usuario) {
   const planilhaId = usuario.planilhaId;
-  if (texto.startsWith('wishlist ')) {
-    const itens = texto.replace('wishlist ', '').split('\n').map(i => i.trim()).filter(Boolean);
+
+  // Adicionar
+  if (/^wishlist\s+/.test(texto)) {
+    const itens = texto
+      .replace(/^wishlist\s+/, '')
+      .split('\n')
+      .map(i => i.trim())
+      .filter(Boolean);
     for (const item of itens) {
       await adicionarItem(planilhaId, 'wishlist', item);
     }
-    return `🎁 Adicionado(s) à wishlist:\n- ${itens.join('\n- ')}`;
+    const lista = await consultarItens(planilhaId, 'wishlist');
+    return `🎁 Itens adicionados à wishlist:\n- ${itens.join(
+      '\n- '
+    )}\n\n${lista}`;
   }
+
+  // Listar
   if (texto === 'wishlist') {
     return await consultarItens(planilhaId, 'wishlist');
   }
-  if (texto.startsWith('unwish ')) {
-    const itens = texto.replace('unwish ', '').split('\n').map(i => i.trim()).filter(Boolean);
+
+  // Remover
+  if (/^unwish\s+/.test(texto)) {
+    const itens = texto
+      .replace(/^unwish\s+/, '')
+      .split('\n')
+      .map(i => i.trim())
+      .filter(Boolean);
     const resultados = [];
     for (const item of itens) {
-      const resultado = await removerItem(planilhaId, 'wishlist', item);
-      resultados.push(`- ${item}: ${resultado.includes('✅') ? 'removido' : 'não encontrado'}`);
+      const msg = await removerItem(planilhaId, 'wishlist', item);
+      resultados.push(
+        `- ${item}: ${msg.includes('✅') ? 'removido' : 'não encontrado'}`
+      );
     }
-    return `🗑️ Itens riscados da sua wishlist:\n${resultados.join('\n')}`;
+    const lista = await consultarItens(planilhaId, 'wishlist');
+    return ['🗑️ Resultado (wishlist):', ...resultados, '', lista].join('\n');
   }
+
   return null;
 }
 

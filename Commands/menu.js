@@ -1,3 +1,4 @@
+// commands/menu.js
 function handle() {
   return [
     '🤖 *Menu do Marvinho*',
@@ -6,30 +7,32 @@ function handle() {
     '──────────────────────────',
     '',
     '🛒 *Lista de Compras*',
-    'Adicione, visualize ou remova itens da sua lista de compras com facilidade.',
-    '• _comprar arroz_ → adiciona “arroz” à lista de compras',
-    '• _lista de compras_ → exibe os itens atuais da lista',
-    '• _comprei arroz_ → marca “arroz” como comprado',
-    '• _limpar lista_ → limpa todos os itens da lista de compras',
+    '  • comprar _item_        → adiciona “item” à lista de compras',
+    '  • lista de compras      → exibe itens atuais (já numerados)',
+    '  • comprei _ID_          → risca o item pela ID',
+    '  • limpar lista          → remove todos os itens (mantém cabeçalho)',
     '',
     '🎁 *Wishlist*',
-    'Anote os desejos do coração — de presentes a sonhos de consumo.',
-    '• _wishlist guitarra_ → adiciona “guitarra” à sua wishlist',
-    '• _unwish guitarra_ → remove “guitarra” da sua wishlist',
-	'• _wishlist_ → exibe os itens atuais da sua lista de desejos',
-
+    '  • wishlist _item_       → adiciona “item” à sua wishlist',
+    '  • wishlist              → exibe itens atuais numerados',
+    '  • unwish _ID_           → remove/riscas pela ID',
     '',
     '💸 *Gastos*',
-    'Registre e acompanhe seus gastos rapidamente.',
-    '• _gasto mercado 45,00_ → registra um gasto de R$45,00 com “mercado”',
-    '• _gastos_ → exibe todos os gastos registrados até agora',
-    '• _remover gasto mercado 45,00_ → remove esse gasto específico da lista',
-    '• _limpar gastos_ → zera toda a lista de gastos',
+    '  • gasto _descrição_     → registra um gasto (ex: mercado 45,00)',
+    '  • gastos                → exibe gastos atuais numerados',
+    '  • remover gasto _ID_    → remove/riscas pela ID',
+    '  • limpar gastos         → zera todos os gastos (mantém cabeçalho)',
+    '',
+    '📝 *To-Do*',
+    '  • todo _tarefa_         → adiciona uma tarefa à sua lista de To-Do',
+    '  • to-do                 → exibe tarefas atuais numeradas',
+    '  • done _ID_             → risca a tarefa pela ID',
+    '  • limpar to-do          → zera todas as tarefas (mantém cabeçalho)',
     '',
     '🚫 *Obs:* não é possível limpar a wishlist 😉',
     '',
     '──────────────────────────',
-    'Digite o comando desejado para começar!'
+    'Para ver o menu avançado com exemplos e detalhes, digite *menu avançado*'
   ].join('\n');
 }
 
