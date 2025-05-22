@@ -5,5 +5,10 @@ node_modules/
 tokens/
 
 # Credenciais e dados sensíveis
-credentials.json
+credenciais.json
 users.json
+
+# GUI Electron
+gui/node_modules/
+gui/dist/
+gui/*.log
