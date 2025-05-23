@@ -1,11 +1,12 @@
 {
-  "name": "1.-botwpp",
+  "name": "marvinho-bot",
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
+    "setup-sheets": "node setupSheets.js",
+    "provisionar": "node provisionar.js",
     "start": "node bot.js",
-    "dev": "nodemon --watch . --ext js,json --exec \"node bot.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --watch . --ext js,json --exec \"node bot.js\""
   },
   "keywords": [],
   "author": "",

@@ -1,46 +1,55 @@
-const wppconnect = require('@wppconnect-team/wppconnect');
-const fs = require('fs');
-const path = require('path');
-const commands = require('./commands');
+const wppconnect    = require('@wppconnect-team/wppconnect');
+const puppeteer     = require('puppeteer');
+const commands      = require('./commands');
 const { getUsuario } = require('./utils/users');
-// Importa o puppeteer completo (não só o core)
-const puppeteer = require('puppeteer');
 
-wppconnect.create({
-  session: 'marvinho',
-  headless: true,
-  qrTimeout: 0,
-  debug: false,
-  puppeteerOptions: {
-    // Usa o executável de Chromium que o pacote puppeteer baixou
-    executablePath: puppeteer.executablePath(),
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--disable-gpu'
-    ],
+(async () => {
+  try {
+    const client = await wppconnect.create({
+      session: 'marvinho',
+      headless: true,
+      qrTimeout: 0,
+      debug: false,
+      puppeteerOptions: {
+        executablePath: puppeteer.executablePath(),
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--disable-gpu'
+        ],
+      },
+    });
+
+    console.log('🤖 Bot conectado e pronto para receber mensagens!');
+
+    client.onMessage(async (message) => {
+      const texto   = message.body.trim().toLowerCase();
+      const usuario = await getUsuario(message.from);
+
+      // se não for usuário cadastrado, ignora completamente
+      if (!usuario) {
+        return;
+      }
+
+      try {
+        const resposta = await commands.handle(texto, usuario);
+        if (resposta) {
+          await client.sendText(message.from, resposta);
+        }
+      } catch (err) {
+        console.error('Erro ao processar comando:', err);
+        // opcional: notifica o usuário cadastrado de erro interno
+        await client.sendText(
+          message.from,
+          '❌ Ocorreu um erro interno. Tente novamente mais tarde.'
+        );
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Falha ao iniciar o bot:', error);
+    process.exit(1);
   }
-})
-.then(client => {
-  console.log('🤖 Bot conectado e pronto para receber mensagens!');
-
-  client.onMessage(async (message) => {
-    const texto = message.body.trim().toLowerCase();
-    const usuario = getUsuario(message.from);
-
-    if (!usuario) {
-      console.log(`Mensagem ignorada de ${message.from}`);
-      return;
-    }
-
-    const resposta = await commands.handle(texto, usuario);
-    if (resposta) {
-      await client.sendText(message.from, resposta);
-    }
-  });
-})
-.catch(error => {
-  console.error('Erro ao iniciar o bot:', error);
-});
+})();
